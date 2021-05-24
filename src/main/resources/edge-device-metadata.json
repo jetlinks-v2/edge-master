@@ -1,0 +1,73 @@
+{
+  "events": [],
+  "properties": [
+    {
+      "id": "cpuUsage",
+      "name": "CPU使用率",
+      "valueType": {
+        "type": "float",
+        "scale": 1,
+        "unit": "percent"
+      },
+      "expands": {
+        "readOnly": "true"
+      }
+    },
+    {
+      "id": "jvmMemUsage",
+      "name": "JVM内存使用率",
+      "valueType": {
+        "type": "float",
+        "unit": "percent"
+      },
+      "expands": {
+        "readOnly": "true"
+      }
+    },
+    {
+      "id": "sysMemUsage",
+      "name": "系统内存使用率",
+      "valueType": {
+        "type": "float",
+        "scale": 1,
+        "unit": "percent"
+      },
+      "expands": {
+        "readOnly": "true"
+      }
+    },
+    {
+      "id": "diskUsage",
+      "name": "磁盘使用率",
+      "valueType": {
+        "type": "float",
+        "scale": 1,
+        "unit": "percent"
+      },
+      "expands": {
+        "readOnly": "true"
+      }
+    },
+    {
+      "id": "cpuTemp",
+      "name": "CPU温度",
+      "valueType": {
+        "type": "int",
+        "unit": "celsiusDegrees"
+      },
+      "expands": {
+        "readOnly": "true"
+      }
+    }
+  ],
+  "functions": [
+    {
+      "id": "restart",
+      "name": "重启",
+      "async": true,
+      "output": {},
+      "inputs": []
+    }
+  ],
+  "tags": []
+}
