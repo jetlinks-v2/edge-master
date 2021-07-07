@@ -1,6 +1,7 @@
 package org.jetlinks.pro.edge.operations;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import lombok.AllArgsConstructor;
 import org.hswebframework.web.bean.FastBeanCopier;
 import org.jetlinks.core.device.DeviceRegistry;
@@ -9,7 +10,9 @@ import org.jetlinks.core.event.Subscription;
 import org.jetlinks.core.message.DeviceMessage;
 import org.jetlinks.core.message.Headers;
 import org.jetlinks.edge.core.EdgeOperations;
+import org.jetlinks.edge.core.entity.EdgeInfoEntity;
 import org.jetlinks.edge.core.monitor.EdgeRunningState;
+import org.jetlinks.pro.device.entity.DeviceInstanceEntity;
 import org.jetlinks.pro.device.service.LocalDeviceInstanceService;
 import org.jetlinks.pro.gateway.DeviceMessageUtils;
 import org.springframework.stereotype.Component;
@@ -85,12 +88,21 @@ public class RemoteEdgeOperations implements EdgeOperations {
     @Override
     public Mono<Object> getDevicePropertySate(String edgeDeviceId, String property) {
         return getState(edgeDeviceId)
-            .map(state-> state.getPropertyValue(property));
+            .map(state -> state.getPropertyValue(property));
     }
 
+    /**
+     * 从平台数据库查询到边缘网关设备的详细数据。组装成 EdgeInfoEntity 返回
+     *
+     * @param edgeDeviceId 边缘网关设备ID
+     * @return EdgeInfoEntity
+     */
     @Override
-    public Mono<Object> edgeDeviceInfo(String edgeDeviceId) {
-        return deviceInstanceService.getDeviceDetail(edgeDeviceId)
-                                    .map(JSON::toJSON);
+    public Mono<EdgeInfoEntity> edgeDeviceInfo(String edgeDeviceId) {
+        return deviceInstanceService
+            .getDeviceDetail(edgeDeviceId)
+            // EdgeInfoEntity 在 core 包，给 agent 及其他模块使用。从json传递数据
+            .map(JSON::toJSON)
+            .map(EdgeInfoEntity::convertDeviceInfoToEdgeInfo);
     }
 }
