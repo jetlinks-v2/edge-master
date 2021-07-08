@@ -94,20 +94,16 @@ public class RemoteEdgeOperations implements EdgeOperations {
     }
 
     /**
-     * 通过边缘网关驱动的方式获取网关信息。functionId == "edge-base-config"
+     * 通过边缘网关驱动的方式获取网关信息。functionId == "edge-base-config"。
+     * 通过设备功能调用实现，发送/返回 的数据平台已经处理。entity 即为 reply.getOutput()
      *
      * @param edgeDeviceId 边缘网关设备ID
-     * @return EdgeInfoEntity
+     * @return EdgeInfoDetail
      */
     @Override
     public Mono<EdgeInfoDetail> edgeDeviceInfo(String edgeDeviceId) {
         return invokeFunction(edgeDeviceId, "edge-base-config")
             .next()
-            .map(entity -> FastBeanCopier.copy(entity, EdgeInfoDetail::new))
-            .onErrorResume(ignore -> {
-                log.error("获取网关配置失败，检查网关连接");
-                return Mono.just(new EdgeInfoDetail());
-            });
-
+            .map(entity -> FastBeanCopier.copy(entity, EdgeInfoDetail::new));
     }
 }
