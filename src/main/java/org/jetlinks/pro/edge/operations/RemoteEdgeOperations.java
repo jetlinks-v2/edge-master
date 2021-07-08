@@ -1,7 +1,8 @@
 package org.jetlinks.pro.edge.operations;
 
-import com.alibaba.fastjson.JSON;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hswebframework.web.bean.FastBeanCopier;
 import org.jetlinks.core.device.DeviceRegistry;
 import org.jetlinks.core.event.EventBus;
@@ -9,6 +10,7 @@ import org.jetlinks.core.event.Subscription;
 import org.jetlinks.core.message.DeviceMessage;
 import org.jetlinks.core.message.Headers;
 import org.jetlinks.edge.core.EdgeOperations;
+import org.jetlinks.edge.core.entity.EdgeInfoDetail;
 import org.jetlinks.edge.core.monitor.EdgeRunningState;
 import org.jetlinks.pro.device.service.LocalDeviceInstanceService;
 import org.jetlinks.pro.gateway.DeviceMessageUtils;
@@ -16,16 +18,15 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
 @AllArgsConstructor
+@Slf4j
 public class RemoteEdgeOperations implements EdgeOperations {
 
     private final DeviceRegistry registry;
-
-
-    private final LocalDeviceInstanceService deviceInstanceService;
 
     private final EventBus eventBus;
 
@@ -48,6 +49,10 @@ public class RemoteEdgeOperations implements EdgeOperations {
                     return Mono.just(reply.getOutput());
                 }))
             ;
+    }
+
+    public Flux<Object> invokeFunction(String edgeDeviceId, String function) {
+        return this.invokeFunction(edgeDeviceId, function, new HashMap<>());
     }
 
     @Override
@@ -85,12 +90,20 @@ public class RemoteEdgeOperations implements EdgeOperations {
     @Override
     public Mono<Object> getDevicePropertySate(String edgeDeviceId, String property) {
         return getState(edgeDeviceId)
-            .map(state-> state.getPropertyValue(property));
+            .map(state -> state.getPropertyValue(property));
     }
 
+    /**
+     * 通过边缘网关驱动的方式获取网关信息。functionId == "edge-base-config"。
+     * 通过设备功能调用实现，发送/返回 的数据平台已经处理。entity 即为 reply.getOutput()
+     *
+     * @param edgeDeviceId 边缘网关设备ID
+     * @return EdgeInfoDetail
+     */
     @Override
-    public Mono<Object> edgeDeviceInfo(String edgeDeviceId) {
-        return deviceInstanceService.getDeviceDetail(edgeDeviceId)
-                                    .map(JSON::toJSON);
+    public Mono<EdgeInfoDetail> edgeDeviceInfo(String edgeDeviceId) {
+        return invokeFunction(edgeDeviceId, "edge-base-config")
+            .next()
+            .map(entity -> FastBeanCopier.copy(entity, EdgeInfoDetail::new));
     }
 }
