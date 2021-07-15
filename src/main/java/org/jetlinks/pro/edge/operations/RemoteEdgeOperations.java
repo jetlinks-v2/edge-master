@@ -1,6 +1,5 @@
 package org.jetlinks.pro.edge.operations;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hswebframework.web.bean.FastBeanCopier;
@@ -12,7 +11,6 @@ import org.jetlinks.core.message.Headers;
 import org.jetlinks.edge.core.EdgeOperations;
 import org.jetlinks.edge.core.entity.EdgeInfoDetail;
 import org.jetlinks.edge.core.monitor.EdgeRunningState;
-import org.jetlinks.pro.device.service.LocalDeviceInstanceService;
 import org.jetlinks.pro.gateway.DeviceMessageUtils;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
