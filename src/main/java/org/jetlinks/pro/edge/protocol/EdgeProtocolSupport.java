@@ -24,8 +24,11 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class EdgeProtocolSupport extends CompositeProtocolSupport {
 
-    public static final String ID = "jetlinks-edge-v1";
-    public static final String NAME = "JetLinks融合网关1.0";
+
+    public static final String ID = System.getProperty("jetlinks.system.protocol.edge.id", "jetlinks-edge-v1");
+    public static final String NAME = System.getProperty("jetlinks.system.protocol.edge.name", "JetLinks融合网关1.0");
+
+    public static final String VERSION = "v1";
 
     public static String METADATA;
 
