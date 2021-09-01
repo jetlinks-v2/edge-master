@@ -44,7 +44,7 @@ public class EdgeDeviceProductEntity extends GenericEntity<String> {
     private String model;
 
     @Column(nullable = false)
-    @DefaultValue(EdgeProtocolSupport.ID)
+    @DefaultValue(EdgeProtocolSupport.VERSION)
     @Schema(description = "版本")
     private String version;
 
