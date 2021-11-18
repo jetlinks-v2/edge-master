@@ -67,9 +67,9 @@ public class EdgeDeviceService extends GenericReactiveCrudService<EdgeDeviceProd
         return Flux
             .from(productEntity)
             .flatMap(product -> productService
-                //新增产品设备
-                .insert(Mono.just(product.toDeviceProduct()))
-                //处理原始数据
+                // 保存/修改 dev_product
+                .save(Mono.just(product.toDeviceProduct()))
+                // 处理原始数据 edge_product
                 .then(handler.apply(Mono.just(product)))
                 //激活产品
                 .then(productService.deploy(product.getId()))
