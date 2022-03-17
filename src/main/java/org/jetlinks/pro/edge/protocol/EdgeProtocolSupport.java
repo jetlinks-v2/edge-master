@@ -3,6 +3,7 @@ package org.jetlinks.pro.edge.protocol;
 import com.alibaba.fastjson.JSON;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.jetlinks.core.Embedded;
 import org.jetlinks.core.defaults.CompositeProtocolSupport;
 import org.jetlinks.core.message.codec.DefaultTransport;
 import org.jetlinks.core.metadata.DefaultConfigMetadata;
@@ -22,7 +23,7 @@ import java.nio.charset.StandardCharsets;
 
 @Component
 @Slf4j
-public class EdgeProtocolSupport extends CompositeProtocolSupport {
+public class EdgeProtocolSupport extends CompositeProtocolSupport implements Embedded {
 
 
     public static final String ID = System.getProperty("jetlinks.system.protocol.edge.id", "jetlinks-edge-v1");
