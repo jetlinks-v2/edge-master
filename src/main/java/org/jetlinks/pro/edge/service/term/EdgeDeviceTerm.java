@@ -17,7 +17,7 @@ public class EdgeDeviceTerm extends AbstractTermFragmentBuilder {
     public SqlFragments createFragments(String columnFullName, RDBColumnMetadata column, Term term) {
         PrepareSqlFragments sqlFragments = PrepareSqlFragments.of();
 
-        sqlFragments.addSql("exists(select 1 from edge_product prod where prod.id =", columnFullName,")");
+        sqlFragments.addSql("exists(select 1 from ",getTableName("edge_product",column)," prod where prod.id =", columnFullName,")");
 
         return sqlFragments;
     }

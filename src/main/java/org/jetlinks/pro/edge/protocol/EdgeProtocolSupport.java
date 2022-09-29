@@ -12,6 +12,7 @@ import org.jetlinks.core.metadata.types.PasswordType;
 import org.jetlinks.core.metadata.types.StringType;
 import org.jetlinks.protocol.official.JetLinksAuthenticator;
 import org.jetlinks.protocol.official.JetLinksMqttDeviceMessageCodec;
+import org.jetlinks.protocol.official.TopicMessageCodec;
 import org.jetlinks.supports.official.JetLinksDeviceMetadata;
 import org.jetlinks.supports.official.JetLinksDeviceMetadataCodec;
 import org.springframework.core.io.ClassPathResource;
@@ -20,6 +21,9 @@ import org.springframework.util.StreamUtils;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -59,9 +63,19 @@ public class EdgeProtocolSupport extends CompositeProtocolSupport implements Emb
             .add("secureId", "secureId", StringType.GLOBAL, DeviceConfigScope.device)
             .add("secureKey", "secureKey", PasswordType.GLOBAL, DeviceConfigScope.device)
         );
+        //路由表
+        addRoutes(DefaultTransport.MQTT, Arrays
+            .stream(TopicMessageCodec.values())
+            .map(TopicMessageCodec::getRoute)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList())
+        );
+
         //设置默认物模型
         JetLinksDeviceMetadata metadata = new JetLinksDeviceMetadata(JSON.parseObject(METADATA));
         addDefaultMetadata(DefaultTransport.MQTT, metadata);
+
+
     }
 
 }

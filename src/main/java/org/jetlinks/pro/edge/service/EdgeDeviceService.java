@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.function.Function;
 
 @Service
+@Deprecated
 public class EdgeDeviceService extends GenericReactiveCrudService<EdgeDeviceProductEntity, String> {
 
     private final LocalDeviceProductService productService;

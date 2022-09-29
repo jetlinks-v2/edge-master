@@ -21,6 +21,7 @@ import java.util.Date;
 @Table(name = "edge_product")
 @Getter
 @Setter
+@Deprecated
 public class EdgeDeviceProductEntity extends GenericEntity<String> {
 
     @Column(nullable = false)
