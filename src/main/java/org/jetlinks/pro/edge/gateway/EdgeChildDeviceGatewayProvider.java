@@ -42,7 +42,7 @@ public class EdgeChildDeviceGatewayProvider implements DeviceGatewayProvider {
     @Override
     public Transport getTransport() {
 //        return DefaultTransport.MQTT;
-        return Transport.of("Gateway");
+        return Transport.of("EdgeGateway");
     }
 
     @Override
