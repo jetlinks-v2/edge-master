@@ -30,8 +30,11 @@ import java.util.stream.Collectors;
 public class EdgeProtocolSupport extends CompositeProtocolSupport implements Embedded {
 
 
-    public static final String ID = System.getProperty("jetlinks.system.protocol.edge.id", "jetlinks-edge-v1");
-    public static final String NAME = System.getProperty("jetlinks.system.protocol.edge.name", "JetLinks融合网关1.0");
+    //边缘端消息协议id
+    public static final String ID = "official-edge-protocol";
+
+    //边缘端消息协议name
+    public static final String NAME = "JetLinks官方边缘端";
 
     public static final String VERSION = "v1";
 

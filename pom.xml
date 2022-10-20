@@ -60,5 +60,11 @@
             <artifactId>edge-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.jetlinks.pro</groupId>
+            <artifactId>mqtt-component</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>
