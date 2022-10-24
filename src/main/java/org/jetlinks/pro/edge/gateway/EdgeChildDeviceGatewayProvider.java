@@ -21,12 +21,12 @@ public class EdgeChildDeviceGatewayProvider implements DeviceGatewayProvider {
 
     @Override
     public String getName() {
-        return "边缘端子设备接入";
+        return "网关子设备接入";
     }
 
     @Override
     public String getDescription() {
-        return "通过官方边缘端接入的子设备";
+        return "适用于官方边缘网关代理的子设备接入";
     }
 
     //接入方式：子设备

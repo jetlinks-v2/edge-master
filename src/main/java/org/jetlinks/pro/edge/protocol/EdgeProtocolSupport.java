@@ -34,7 +34,7 @@ public class EdgeProtocolSupport extends CompositeProtocolSupport implements Emb
     public static final String ID = "official-edge-protocol";
 
     //边缘端消息协议name
-    public static final String NAME = "JetLinks官方边缘端";
+    public static final String NAME = "JetLinks官方边缘端消息协议";
 
     public static final String VERSION = "v1";
 
