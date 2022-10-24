@@ -63,7 +63,12 @@ public class EdgeDeviceGateWayProvider implements DeviceGatewayProvider {
      */
     @Override
     public String getName() {
-        return "官方边缘端设备网关";
+        return "边缘网关接入";
+    }
+
+    @Override
+    public String getDescription() {
+        return "适用于官方边缘网关设备接入";
     }
 
     /**
