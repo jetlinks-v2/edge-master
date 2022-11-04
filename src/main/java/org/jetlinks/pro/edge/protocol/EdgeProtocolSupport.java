@@ -10,6 +10,7 @@ import org.jetlinks.core.metadata.DefaultConfigMetadata;
 import org.jetlinks.core.metadata.DeviceConfigScope;
 import org.jetlinks.core.metadata.types.PasswordType;
 import org.jetlinks.core.metadata.types.StringType;
+import org.jetlinks.pro.device.enums.DeviceFeature;
 import org.jetlinks.protocol.official.JetLinksAuthenticator;
 import org.jetlinks.protocol.official.JetLinksMqttDeviceMessageCodec;
 import org.jetlinks.protocol.official.TopicMessageCodec;
@@ -78,7 +79,8 @@ public class EdgeProtocolSupport extends CompositeProtocolSupport implements Emb
         JetLinksDeviceMetadata metadata = new JetLinksDeviceMetadata(JSON.parseObject(METADATA));
         addDefaultMetadata(DefaultTransport.MQTT, metadata);
 
-
+        // 子设备状态自管理
+        addFeature(DeviceFeature.selfManageState);
     }
 
 }
