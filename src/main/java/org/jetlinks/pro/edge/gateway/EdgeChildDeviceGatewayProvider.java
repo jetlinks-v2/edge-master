@@ -21,7 +21,7 @@ public class EdgeChildDeviceGatewayProvider implements DeviceGatewayProvider {
 
     @Override
     public String getName() {
-        return "网关子设备接入";
+        return "官方网关子设备接入";
     }
 
     @Override
