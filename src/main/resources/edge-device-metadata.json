@@ -1,5 +1,99 @@
 {
-  "events": [],
+  "events": [
+    {
+      "valueType": {
+        "type": "object",
+        "properties": [
+          {
+            "valueType": {
+              "type": "string"
+            },
+            "name": "名称",
+            "description": "资源库模板名称",
+            "id": "name"
+          },
+          {
+            "valueType": {
+              "type": "string"
+            },
+            "name": "设备ID",
+            "description": "上传模板的边缘网关设备ID",
+            "id": "deviceId"
+          },
+          {
+            "valueType": {
+              "type": "string"
+            },
+            "name": "设备名称",
+            "description": "上传模板的边缘网关设备名称",
+            "id": "deviceName"
+          },
+          {
+            "valueType": {
+              "type": "string"
+            },
+            "name": "产品ID",
+            "description": "上传模板的边缘网关所属产品ID",
+            "id": "productId"
+          },
+          {
+            "valueType": {
+              "type": "string"
+            },
+            "name": "产品名称",
+            "description": "上传模板的边缘网关所属产品名称",
+            "id": "productName"
+          },
+          {
+            "valueType": {
+              "type": "string"
+            },
+            "name": "模板内容",
+            "description": "JSON格式",
+            "id": "metadata"
+          },
+          {
+            "valueType": {
+              "type": "string"
+            },
+            "name": "通道类型",
+            "description": "通道的通讯协议，如MODBUS_TCP",
+            "id": "provider"
+          },
+          {
+            "valueType": {
+              "type": "string"
+            },
+            "name": "通讯协议",
+            "description": "边缘网关与平台的通讯协议，如MQTT",
+            "id": "transport"
+          },
+          {
+            "valueType": {
+              "elements": [
+                {
+                  "text": "正常",
+                  "value": "enabled"
+                },
+                {
+                  "text": "禁用",
+                  "value": "disabled"
+                }
+              ],
+              "type": "enum"
+            },
+            "name": "状态",
+            "id": "state"
+          }
+        ]
+      },
+      "name": "上报资源库",
+      "id": "collector-template-upload",
+      "expands": {
+        "level": "ordinary"
+      }
+    }
+  ],
   "properties": [
     {
       "id": "cpuUsage",
