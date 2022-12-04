@@ -28,8 +28,7 @@ public class EdgeTemplateEventHandler {
      */
     @Subscribe("/device/*/*/message/event/entity-template-upload")
     public Mono<SaveResult> handleEvent(EventMessage message) {
-        return Mono.just(message)
-            .map(msg -> FastBeanCopier.copy(message.getData(), new EntityTemplateEntity()))
-            .as(entityTemplateService::save);
+        return entityTemplateService
+            .save(FastBeanCopier.copy(message.getData(), new EntityTemplateEntity()));
     }
 }
