@@ -2,7 +2,9 @@ package org.jetlinks.pro.edge.service;
 
 import org.hswebframework.ezorm.rdb.mapping.defaults.SaveResult;
 import org.hswebframework.web.bean.FastBeanCopier;
+import org.jetlinks.core.device.DeviceRegistry;
 import org.jetlinks.core.message.event.EventMessage;
+import org.jetlinks.pro.PropertyConstants;
 import org.jetlinks.pro.gateway.annotation.Subscribe;
 import org.jetlinks.pro.template.entity.EntityTemplateEntity;
 import org.jetlinks.pro.template.impl.EntityTemplateService;
@@ -19,8 +21,12 @@ public class EdgeTemplateEventHandler {
 
     private final EntityTemplateService entityTemplateService;
 
-    public EdgeTemplateEventHandler(EntityTemplateService entityTemplateService) {
+    private final DeviceRegistry deviceRegistry;
+
+    public EdgeTemplateEventHandler(EntityTemplateService entityTemplateService,
+                                    DeviceRegistry deviceRegistry) {
         this.entityTemplateService = entityTemplateService;
+        this.deviceRegistry = deviceRegistry;
     }
 
     /**
@@ -28,7 +34,20 @@ public class EdgeTemplateEventHandler {
      */
     @Subscribe("/device/*/*/message/event/entity-template-upload")
     public Mono<SaveResult> handleEvent(EventMessage message) {
-        return entityTemplateService
-            .save(FastBeanCopier.copy(message.getData(), new EntityTemplateEntity()));
+        return Mono.just(message)
+            .map(msg -> FastBeanCopier.copy(msg.getData(), new EntityTemplateEntity()))
+            .flatMap(entity -> this
+                .getDeviceName(entity.getSourceId())
+                .map(sourceName -> {
+                    entity.setSourceName(sourceName);
+                    return entity;
+                }))
+            .as(entityTemplateService::save);
+    }
+
+    private Mono<String> getDeviceName(String deviceId) {
+        return deviceRegistry
+            .getDevice(deviceId)
+            .flatMap(deviceOperator -> deviceOperator.getSelfConfig(PropertyConstants.deviceName));
     }
 }
