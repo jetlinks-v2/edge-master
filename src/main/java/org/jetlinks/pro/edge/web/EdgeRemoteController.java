@@ -60,13 +60,7 @@ public class EdgeRemoteController {
     @Operation(summary = "获取远程控制地址")
     @ResourceAction(id = "remote", name = "远程控制")
     public Mono<String> remoteUrl(@PathVariable String deviceId) {
-        return Mono
-            .zip(
-                getHost(),
-                getEdgeSn(deviceId)
-            )
-            // 地址 = 内网穿透服务地址 + # + sn码
-            .map(tp2 -> tp2.getT1() + "/#/" + tp2.getT2());
+        return getHost();
     }
 
     /**
