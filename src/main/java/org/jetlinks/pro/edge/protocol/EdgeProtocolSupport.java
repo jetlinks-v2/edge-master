@@ -5,6 +5,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetlinks.core.Embedded;
 import org.jetlinks.core.defaults.CompositeProtocolSupport;
+import org.jetlinks.core.device.DeviceFeatures;
 import org.jetlinks.core.message.codec.DefaultTransport;
 import org.jetlinks.core.metadata.DefaultConfigMetadata;
 import org.jetlinks.core.metadata.DeviceConfigScope;
@@ -67,6 +68,7 @@ public class EdgeProtocolSupport extends CompositeProtocolSupport implements Emb
             .add("secureId", "secureId", StringType.GLOBAL, DeviceConfigScope.device)
             .add("secureKey", "secureKey", PasswordType.GLOBAL, DeviceConfigScope.device)
         );
+        addFeature(DeviceFeatures.supportFirmware);
         //路由表
         addRoutes(DefaultTransport.MQTT, Arrays
             .stream(TopicMessageCodec.values())
