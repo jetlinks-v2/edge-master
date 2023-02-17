@@ -40,7 +40,7 @@ public class DefaultFrpServerManager implements FrpServerManager {
     // 本节点已分发的网络资源，[设备ID，网络资源]
     private final Map<String, NetworkResource> distributedResource = new ConcurrentHashMap<>();
 
-    protected final FrpServerService frpServerService;
+    private final FrpServerService frpServerService;
 
     private final FrpServerProvider provider;
 
@@ -80,7 +80,7 @@ public class DefaultFrpServerManager implements FrpServerManager {
 
     private Mono<FrpDistributeInfo> doDistributePort(DistributeRequest request) {
         if (!isRunning()) {
-            return Mono.error(() -> new BusinessException("", "error.frp_available_server_not_found"));
+            return Mono.error(() -> new BusinessException("error.frp_available_server_not_found"));
         }
         return this
             .getRandomPort(request)
@@ -119,7 +119,7 @@ public class DefaultFrpServerManager implements FrpServerManager {
                         distributedResource.values().forEach(res -> {
                             if (res.containsPort(request.getTransport(), port)) {
                                 // 端口已被使用
-                                throw new BusinessException("", "error.frp_port_used", port);
+                                throw new BusinessException("error.frp_port_used", port);
                             }
                         });
                         NetworkResource res = new NetworkResource();
@@ -128,7 +128,7 @@ public class DefaultFrpServerManager implements FrpServerManager {
                         res.addPorts(request.getTransport(), Collections.singleton(port));
                         return res;
                     })
-                    .orElseThrow(() -> new BusinessException("", "error.frp_available_resource_not_found"));
+                    .orElseThrow(() -> new BusinessException("error.frp_available_resource_not_found"));
             }))
             .map(res -> res.getPortList().get(0).getPort());
     }
@@ -164,6 +164,9 @@ public class DefaultFrpServerManager implements FrpServerManager {
         if (isRunning()) {
             return Mono.empty();
         }
+        if (provider == null) {
+            return Mono.error(() -> new BusinessException("error.frp_not_enable"));
+        }
         return provider
             .getMatchedServer()
             .flatMap(this::startServer);
@@ -189,6 +192,10 @@ public class DefaultFrpServerManager implements FrpServerManager {
     }
 
     private void init() {
+        if (provider == null) {
+            log.warn("frp is not enabled");
+            return;
+        }
         provider.getMatchedServer()
             .doOnNext(server -> server.init(FRPS_INIT_SHELL))
             .flatMap(this::startServer)
@@ -210,13 +217,16 @@ public class DefaultFrpServerManager implements FrpServerManager {
         return frpServerService
             .getClusterFrpServerConfig(rpcManager.currentServerId())
             .filter(config -> config.getState() == FrpServerState.enabled)
-            .switchIfEmpty(Mono.error(() -> new BusinessException("", "error.frp_no_server_config_avaliable")))
+            .switchIfEmpty(Mono.error(() -> new BusinessException("error.frp_no_server_config_avaliable")))
             .doOnNext(config -> doStartServer(server, config.getFrpServerConfig()))
             .then();
     }
 
     private void doStartServer(FrpServer server,
                                FrpServerConfig config) {
+        if (server == null) {
+            throw new BusinessException("error.frp_available_server_not_found");
+        }
         config.validate();
         server.setConfig(config);
         server.start(FRPS_START_SHELL);
