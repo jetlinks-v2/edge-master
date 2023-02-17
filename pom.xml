@@ -12,6 +12,19 @@
 
     <artifactId>edge-master</artifactId>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>bin</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
 
@@ -64,6 +77,12 @@
         <dependency>
             <groupId>org.jetlinks.pro</groupId>
             <artifactId>mqtt-component</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetlinks.pro</groupId>
+            <artifactId>test-component</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
