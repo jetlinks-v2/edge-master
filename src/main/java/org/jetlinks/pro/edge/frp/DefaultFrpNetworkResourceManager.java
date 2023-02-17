@@ -100,14 +100,14 @@ public class DefaultFrpNetworkResourceManager implements FrpNetworkResourceManag
             .getDistributedResource(deviceId)
             // 获取一个可用的网络资源
             .switchIfEmpty(this.getAliveResources().next())
-            .switchIfEmpty(Mono.error(() -> new BusinessException("", "error.frp_available_resource_not_found")))
+            .switchIfEmpty(Mono.error(() -> new BusinessException("error.frp_available_resource_not_found")))
             .flatMap(resource -> serverManager
                 .distributeRandomPort(DistributeRequest.of(deviceId, transport, resource)));
     }
 
     private Flux<NetworkResource> getLocalAliveResources() {
         if (!serverManager.isRunning()) {
-            return Flux.empty();
+            return Flux.error(() -> new BusinessException("error.frp_available_server_not_found"));
         }
         return service
             .getClusterFrpServerConfig(rpcManager.currentServerId())

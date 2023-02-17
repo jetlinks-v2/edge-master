@@ -28,7 +28,7 @@ public class FrpConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(FrpServerProvider.class)
-    @ConditionalOnProperty(prefix = "frp", name = "enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "frp", name = "enabled", havingValue = "true")
     FrpServerProvider edgeNetworkConfigProvider(ObjectProvider<FrpServer> executor) {
         DefaultFrpServerProvider provider = new DefaultFrpServerProvider(new FrpSystemHepler());
         executor.forEach(provider::register);
@@ -36,11 +36,10 @@ public class FrpConfiguration {
     }
 
     @Bean(destroyMethod = "stop")
-    @ConditionalOnBean(FrpServerProvider.class)
     FrpServerManager frpServerManager(FrpServerService frpServerService,
-                                      FrpServerProvider provider,
+                                      ObjectProvider<FrpServerProvider> provider,
                                       RpcManager rpcManager) {
-        return new DefaultFrpServerManager(frpServerService, provider, rpcManager);
+        return new DefaultFrpServerManager(frpServerService, provider.getIfAvailable(), rpcManager);
     }
 
 }
