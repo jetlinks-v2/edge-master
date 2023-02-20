@@ -13,6 +13,5 @@ log_level = info
 log_max_days = 3
 EOF
 
-systemctl enable frps
-systemctl restart frps
+$1/$4 -c $1/frps.ini
 
