@@ -54,26 +54,12 @@ public interface FrpServer {
      * @param startShell 脚本名称
      * @return void
      */
-    default void start(String startShell) {
-        FrpServerConfig config = getConfig();
-        if (config == null) {
-            throw new NotFoundException();
-        }
-
-        String command = "sh " + ReourceFileUtils.SHELL_TEMP_PATH + File.separator + startShell +
-            " " + ReourceFileUtils.ABSOLUTE_APP_TEMP_PATH +
-            " " + getConfig().getBindPort() +
-            " " + getConfig().getToken();
-
-        RuntimeUtil.execForStr(command);
-    }
+    void start(String startShell);
 
     /**
      * 停止服务
      */
-    default void stop() {
-        RuntimeUtil.execForStr(STOP_SHELL);
-    }
+    void stop();
 
     /**
      * 初始化服务
