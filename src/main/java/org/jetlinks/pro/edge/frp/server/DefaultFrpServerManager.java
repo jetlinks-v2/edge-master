@@ -18,6 +18,7 @@ import org.jetlinks.pro.network.resource.NetworkResource;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.Map;
@@ -58,8 +59,6 @@ public class DefaultFrpServerManager implements FrpServerManager {
 
         ReourceFileUtils.copyShellFile(FRPS_SHELL_PATH, FRPS_INIT_SHELL);
         ReourceFileUtils.copyShellFile(FRPS_SHELL_PATH, FRPS_START_SHELL);
-
-        init();
     }
 
     @Override
@@ -191,6 +190,7 @@ public class DefaultFrpServerManager implements FrpServerManager {
         return runningServer != null;
     }
 
+    @PostConstruct
     private void init() {
         if (provider == null) {
             log.warn("frp is not enabled");
