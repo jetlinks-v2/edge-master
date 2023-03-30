@@ -15,6 +15,7 @@ import org.jetlinks.pro.edge.frp.service.FrpServerService;
 import org.jetlinks.pro.edge.utils.ReourceFileUtils;
 import org.jetlinks.pro.gateway.annotation.Subscribe;
 import org.jetlinks.pro.network.resource.NetworkResource;
+import org.springframework.boot.CommandLineRunner;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -32,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author zhangji 2023/1/10
  */
 @Slf4j
-public class DefaultFrpServerManager implements FrpServerManager {
+public class DefaultFrpServerManager implements FrpServerManager, CommandLineRunner {
 
     private static final String FRPS_SHELL_PATH  = "sh";
     private static final String FRPS_INIT_SHELL  = "frps-init.sh";
@@ -190,7 +191,6 @@ public class DefaultFrpServerManager implements FrpServerManager {
         return runningServer != null;
     }
 
-    @PostConstruct
     private void init() {
         if (provider == null) {
             log.warn("frp is not enabled");
@@ -232,6 +232,11 @@ public class DefaultFrpServerManager implements FrpServerManager {
         server.start(FRPS_START_SHELL);
 
         this.runningServer = server;
+    }
+
+    @Override
+    public void run(String... args) {
+        init();
     }
 
     public class ServiceImpl implements Service {
