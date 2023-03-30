@@ -15,9 +15,11 @@ import org.jetlinks.pro.edge.frp.service.FrpServerService;
 import org.jetlinks.pro.edge.utils.ReourceFileUtils;
 import org.jetlinks.pro.gateway.annotation.Subscribe;
 import org.jetlinks.pro.network.resource.NetworkResource;
+import org.springframework.boot.CommandLineRunner;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.Map;
@@ -31,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author zhangji 2023/1/10
  */
 @Slf4j
-public class DefaultFrpServerManager implements FrpServerManager {
+public class DefaultFrpServerManager implements FrpServerManager, CommandLineRunner {
 
     private static final String FRPS_SHELL_PATH  = "sh";
     private static final String FRPS_INIT_SHELL  = "frps-init.sh";
@@ -58,8 +60,6 @@ public class DefaultFrpServerManager implements FrpServerManager {
 
         ReourceFileUtils.copyShellFile(FRPS_SHELL_PATH, FRPS_INIT_SHELL);
         ReourceFileUtils.copyShellFile(FRPS_SHELL_PATH, FRPS_START_SHELL);
-
-        init();
     }
 
     @Override
@@ -232,6 +232,11 @@ public class DefaultFrpServerManager implements FrpServerManager {
         server.start(FRPS_START_SHELL);
 
         this.runningServer = server;
+    }
+
+    @Override
+    public void run(String... args) {
+        init();
     }
 
     public class ServiceImpl implements Service {
