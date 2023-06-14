@@ -13,7 +13,6 @@ import org.jetlinks.pro.edge.frp.server.DefaultFrpServerProvider;
 import org.jetlinks.pro.edge.frp.server.FrpProperties;
 import org.jetlinks.pro.edge.frp.server.FrpServer;
 import org.jetlinks.pro.edge.frp.server.FrpServerConfig;
-import org.jetlinks.pro.edge.frp.server.FrpServerManager;
 import org.jetlinks.pro.edge.frp.server.FrpServerProvider;
 import org.jetlinks.pro.edge.frp.server.FrpSystemHepler;
 import org.jetlinks.pro.edge.frp.server.impl.FrpServerArm64;
@@ -27,8 +26,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * frp服务生命周期-单元测试.
@@ -44,19 +44,25 @@ public class FrpManagerTest {
     private static final String DEVICE_1  = "test1";
     private static final String DEVICE_2  = "test2";
     private static final String DEVICE_3  = "test3";
+    private static final String DOMAIN_1  = "www.test.com/frp/1";
 
     private FrpProperties properties;
+    private FrpServerConfig config;
 
     @BeforeEach
     void init() {
         properties = new FrpProperties();
         properties.setEnabled(true);
-        FrpServerConfig config = new FrpServerConfig();
+        config = new FrpServerConfig();
         config.setPublicHost("0.0.0.0");
         config.setBindPort(BIND_PORT);
         config.setToken(TOKEN);
         // 分配2个端口
         config.setResources(Collections.singletonList("8811-8812/tcp"));
+        // 配置端口的域名映射
+        Map<Integer, String> mapping = new HashMap<>();
+        mapping.put(8811, DOMAIN_1);
+        config.setDomainMapping(mapping);
         properties.setConfig(config);
     }
 
@@ -93,7 +99,8 @@ public class FrpManagerTest {
                 return repository;
             }
         };
-        FrpServerManager manager = new DefaultFrpServerManager(service, provider, rpcManager);
+        DefaultFrpServerManager manager = new DefaultFrpServerManager(service, provider, rpcManager);
+        manager.run();
 
         manager
             .getServer()
@@ -111,7 +118,8 @@ public class FrpManagerTest {
         // 分发端口给设备1，共2个端口
         resourceManager
             .distributeResource(DEVICE_1, NetworkTransport.TCP)
-            .doOnNext(info -> log.info("distributeRandomPort finished. deviceId: {}, remotePort: {}", DEVICE_1, info.getClientConfigList().get(0).getRemotePort()))
+            .doOnNext(info -> log.info("distributeRandomPort finished. deviceId: {}, remotePort: {}, domain: {}",
+                DEVICE_1, info.getClientConfigList().get(0).getRemotePort(), info.getClientConfigList().get(0).getDomain()))
             .as(StepVerifier::create)
             .expectNextMatches(info -> info.getBindPort() == BIND_PORT && info.getToken().equals(TOKEN))
             .verifyComplete();
@@ -119,8 +127,8 @@ public class FrpManagerTest {
         // 再次分发端口给设备1，重用端口
         resourceManager
             .distributeResource(DEVICE_1, NetworkTransport.TCP)
-            .doOnNext(info -> log.info("distributeRandomPort finished. deviceId: {}, remotePort: {}",
-                    DEVICE_1, info.getClientConfigList().get(0).getRemotePort()))
+            .doOnNext(info -> log.info("distributeRandomPort finished. deviceId: {}, remotePort: {}, domain: {}",
+                    DEVICE_1, info.getClientConfigList().get(0).getRemotePort(), info.getClientConfigList().get(0).getDomain()))
             .as(StepVerifier::create)
             .expectNextMatches(info -> info.getBindPort() == BIND_PORT && info.getToken().equals(TOKEN))
             .verifyComplete();
@@ -128,8 +136,8 @@ public class FrpManagerTest {
         // 分发端口给设备2，共2个端口，正常分发
         resourceManager
             .distributeResource(DEVICE_2, NetworkTransport.TCP)
-            .doOnNext(info -> log.info("distributeRandomPort finished. deviceId: {}, remotePort: {}",
-                DEVICE_2, info.getClientConfigList().get(0).getRemotePort()))
+            .doOnNext(info -> log.info("distributeRandomPort finished. deviceId: {}, remotePort: {}, domain: {}",
+                DEVICE_2, info.getClientConfigList().get(0).getRemotePort(), info.getClientConfigList().get(0).getDomain()))
             .as(StepVerifier::create)
             .expectNextMatches(info -> info.getBindPort() == BIND_PORT && info.getToken().equals(TOKEN))
             .verifyComplete();
@@ -170,11 +178,6 @@ public class FrpManagerTest {
         Mockito.when(server.getType()).thenReturn(TEST_TYPE);
         Mockito.when(server.matchRelease(Mockito.anyString())).thenReturn(true);
 
-        FrpServerConfig config = new FrpServerConfig();
-        config.setPublicHost("0.0.0.0");
-        config.setBindPort(BIND_PORT);
-        config.setToken(TOKEN);
-        config.setResources(Arrays.asList("8811-8820/tcp"));
         Mockito.when(server.getConfig()).thenReturn(config);
 
         return server;

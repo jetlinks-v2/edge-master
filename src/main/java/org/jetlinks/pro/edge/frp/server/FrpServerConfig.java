@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * frp服务配置.
@@ -56,6 +57,8 @@ public class FrpServerConfig {
      * 网络资源配置，支持[起始端口-终止端口/协议]的格式（例如8811-8820/tcp）
      */
     private List<String> resources = new ArrayList<>();
+
+    private Map<Integer, String> domainMapping;
 
     public void validate() {
         ValidatorUtils.tryValidate(this);
