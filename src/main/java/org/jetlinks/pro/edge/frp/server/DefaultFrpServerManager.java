@@ -92,6 +92,9 @@ public class DefaultFrpServerManager implements FrpServerManager, CommandLineRun
                     FrpClientConfig clientConfig = new FrpClientConfig();
                     clientConfig.setType(FrpDistributeInfo.FrpcType.of(request.getTransport().name()));
                     clientConfig.setRemotePort(port);
+                    if (distributeInfo.getDomainMapping() != null) {
+                        clientConfig.setDomain(distributeInfo.getDomainMapping().get(port));
+                    }
                     distributeInfo.setClientConfigList(Collections.singletonList(clientConfig));
                 })
             );
@@ -119,7 +122,7 @@ public class DefaultFrpServerManager implements FrpServerManager, CommandLineRun
                         distributedResource.values().forEach(res -> {
                             if (res.containsPort(request.getTransport(), port)) {
                                 // 端口已被使用
-                                throw new BusinessException("error.frp_port_used", port);
+                                throw new BusinessException("error.frp_port_used", 500, port);
                             }
                         });
                         NetworkResource res = new NetworkResource();
