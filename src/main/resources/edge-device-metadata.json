@@ -1,4 +1,82 @@
 {
+  "functions": [
+    {
+      "async": true,
+      "inputs": [],
+      "name": "重启",
+      "id": "restart"
+    }
+  ],
+  "properties": [
+    {
+      "valueType": {
+        "unit": "percent",
+        "round": "HALF_UP",
+        "scale": 1,
+        "type": "float"
+      },
+      "name": "CPU使用率",
+      "id": "cpuUsage",
+      "expands": {
+        "source": "device",
+        "type": ["read","report"]
+      }
+    },
+    {
+      "valueType": {
+        "unit": "percent",
+        "round": "HALF_UP",
+        "type": "float"
+      },
+      "name": "JVM内存使用率",
+      "id": "jvmMemUsage",
+      "expands": {
+        "source": "device",
+        "type": ["read","report"]
+      }
+    },
+    {
+      "valueType": {
+        "unit": "percent",
+        "round": "HALF_UP",
+        "scale": 1,
+        "type": "float"
+      },
+      "name": "系统内存使用率",
+      "id": "sysMemUsage",
+      "expands": {
+        "source": "device",
+        "type": ["read","report"]
+      }
+    },
+    {
+      "valueType": {
+        "unit": "percent",
+        "round": "HALF_UP",
+        "scale": 1,
+        "type": "float"
+      },
+      "name": "磁盘使用率",
+      "id": "diskUsage",
+      "expands": {
+        "source": "device",
+        "type": ["read","report"]
+      }
+    },
+    {
+      "valueType": {
+        "unit": "celsiusDegrees",
+        "round": "HALF_UP",
+        "type": "int"
+      },
+      "name": "CPU温度",
+      "id": "cpuTemp",
+      "expands": {
+        "source": "device",
+        "type": ["read","report"]
+      }
+    }
+  ],
   "events": [
     {
       "valueType": {
@@ -92,75 +170,6 @@
       "expands": {
         "level": "ordinary"
       }
-    }
-  ],
-  "properties": [
-    {
-      "id": "cpuUsage",
-      "name": "CPU使用率",
-      "valueType": {
-        "type": "float",
-        "scale": 1,
-        "unit": "percent"
-      },
-      "expands": {
-        "readOnly": "true"
-      }
-    },
-    {
-      "id": "jvmMemUsage",
-      "name": "JVM内存使用率",
-      "valueType": {
-        "type": "float",
-        "unit": "percent"
-      },
-      "expands": {
-        "readOnly": "true"
-      }
-    },
-    {
-      "id": "sysMemUsage",
-      "name": "系统内存使用率",
-      "valueType": {
-        "type": "float",
-        "scale": 1,
-        "unit": "percent"
-      },
-      "expands": {
-        "readOnly": "true"
-      }
-    },
-    {
-      "id": "diskUsage",
-      "name": "磁盘使用率",
-      "valueType": {
-        "type": "float",
-        "scale": 1,
-        "unit": "percent"
-      },
-      "expands": {
-        "readOnly": "true"
-      }
-    },
-    {
-      "id": "cpuTemp",
-      "name": "CPU温度",
-      "valueType": {
-        "type": "int",
-        "unit": "celsiusDegrees"
-      },
-      "expands": {
-        "readOnly": "true"
-      }
-    }
-  ],
-  "functions": [
-    {
-      "id": "restart",
-      "name": "重启",
-      "async": true,
-      "output": {},
-      "inputs": []
     }
   ],
   "tags": []
