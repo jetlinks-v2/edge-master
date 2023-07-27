@@ -4,7 +4,57 @@
       "async": true,
       "inputs": [],
       "name": "重启",
-      "id": "restart"
+      "id": "restart",
+      "expands": {}
+    },
+    {
+      "async": true,
+      "inputs": [
+        {
+          "id": "edgeLogLv",
+          "name": "边端日志级别",
+          "valueType": {
+            "type": "enum",
+            "elements": [
+              {
+                "value": "OFF",
+                "text": "OFF"
+              },
+              {
+                "value": "ERROR",
+                "text": "ERROR"
+              },
+              {
+                "value": "WARN",
+                "text": "WARN"
+              },
+              {
+                "value": "INFO",
+                "text": "INFO"
+              },
+              {
+                "value": "DEBUG",
+                "text": "DEBUG"
+              },
+              {
+                "value": "TRACE",
+                "text": "TRACE"
+              },
+              {
+                "value": "ALL",
+                "text": "ALL"
+              }
+            ]
+          },
+          "expands": {
+            "required": true
+          }
+        }
+      ],
+      "name": " 设置边端上报日志级别",
+      "id": "edgeLogLv",
+      "expands": {},
+      "description": "日志级别：ALL<TRACE < DEBUG < INFO < WARN < ERROR<OFF"
     }
   ],
   "properties": [
@@ -18,8 +68,11 @@
       "name": "CPU使用率",
       "id": "cpuUsage",
       "expands": {
-        "source": "device",
-        "type": ["read","report"]
+        "type": [
+          "read",
+          "report"
+        ],
+        "source": "device"
       }
     },
     {
@@ -31,8 +84,11 @@
       "name": "JVM内存使用率",
       "id": "jvmMemUsage",
       "expands": {
-        "source": "device",
-        "type": ["read","report"]
+        "type": [
+          "read",
+          "report"
+        ],
+        "source": "device"
       }
     },
     {
@@ -45,8 +101,11 @@
       "name": "系统内存使用率",
       "id": "sysMemUsage",
       "expands": {
-        "source": "device",
-        "type": ["read","report"]
+        "type": [
+          "read",
+          "report"
+        ],
+        "source": "device"
       }
     },
     {
@@ -59,8 +118,11 @@
       "name": "磁盘使用率",
       "id": "diskUsage",
       "expands": {
-        "source": "device",
-        "type": ["read","report"]
+        "type": [
+          "read",
+          "report"
+        ],
+        "source": "device"
       }
     },
     {
@@ -72,8 +134,11 @@
       "name": "CPU温度",
       "id": "cpuTemp",
       "expands": {
-        "source": "device",
-        "type": ["read","report"]
+        "type": [
+          "read",
+          "report"
+        ],
+        "source": "device"
       }
     }
   ],
