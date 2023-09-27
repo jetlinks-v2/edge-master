@@ -22,7 +22,7 @@ import static org.jetlinks.pro.device.enums.DeviceState.offline;
 @Component
 @AllArgsConstructor
 @Slf4j
-public class DeviceInstanceEntityEventHandler {
+public class EdgeGatewayDeviceHandler {
 
     private final static String OFFICIALEDGEGATEWAY= "official-edge-gateway";
 
